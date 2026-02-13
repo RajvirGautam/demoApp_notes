@@ -4,12 +4,13 @@ import NotePage from "./page/Note.tsx";
 
 function App() {
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<Login/>} />
-        <Route path="/note" element={<NotePage />} /> 
-      </Routes>
-    </Router>
+   <Router basename="/">
+  <Routes>
+    <Route path="/" element={<Login />} />
+    <Route path="/notes" element={<NotePage />} />
+  </Routes>
+</Router>
+
   )
 }
 
