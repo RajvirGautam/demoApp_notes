@@ -8,7 +8,7 @@ import cors from "cors";
 const app = express();
 app.use(express.json());
 app.use(cors({
-    origin: "https://notesweb-two.vercel.app",
+    origin: ["https://notesweb-two.vercel.app", "http://localhost:5173"],
     credentials: true,
 }));
 import { User, Note } from "./db.js";
