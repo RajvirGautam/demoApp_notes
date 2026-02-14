@@ -25,11 +25,17 @@ app.use(cors({
 
 
 // Nodemailer Configuration
+// Nodemailer Configuration (Port 587 for Render compatibility)
 const transporter = nodemailer.createTransport({
-  service: "gmail",
+  host: "smtp.gmail.com",
+  port: 587,
+  secure: false, // Use TLS
   auth: {
     user: process.env.EMAIL_USER,
     pass: process.env.EMAIL_PASS,
+  },
+  tls: {
+    rejectUnauthorized: false,
   },
 });
 
@@ -41,6 +47,7 @@ transporter.verify((error, success) => {
     console.log("✅ Email server ready");
   }
 });
+
 
 // Helper function to send email
 // Helper function to send email with beautiful template
