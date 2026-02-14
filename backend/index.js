@@ -25,11 +25,12 @@ app.use(cors({
 
 
 // Nodemailer Configuration
-// Nodemailer Configuration (Port 587 for Render compatibility)
+
+// Nodemailer Configuration (FORCE IPv4)
 const transporter = nodemailer.createTransport({
   host: "smtp.gmail.com",
   port: 587,
-  secure: false, // Use TLS
+  secure: false,
   auth: {
     user: process.env.EMAIL_USER,
     pass: process.env.EMAIL_PASS,
@@ -37,15 +38,11 @@ const transporter = nodemailer.createTransport({
   tls: {
     rejectUnauthorized: false,
   },
-});
-
-// Verify email configuration on startup
-transporter.verify((error, success) => {
-  if (error) {
-    console.log("⚠️ Email configuration error:", error.message);
-  } else {
-    console.log("✅ Email server ready");
-  }
+  // FORCE IPv4 - THIS IS THE KEY!
+  family: 4,
+  connectionTimeout: 10000,
+  greetingTimeout: 10000,
+  socketTimeout: 10000,
 });
 
 
