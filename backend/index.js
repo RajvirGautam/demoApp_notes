@@ -27,14 +27,21 @@ app.use(cors({
 // Nodemailer Configuration
 
 // Nodemailer Configuration with SendGrid
+console.log("📧 Configuring SendGrid...");
+console.log("📧 API Key exists:", !!process.env.SENDGRID_API_KEY);
+console.log("📧 API Key starts with:", process.env.SENDGRID_API_KEY?.substring(0, 10));
+
 const transporter = nodemailer.createTransport({
   host: "smtp.sendgrid.net",
-  port: 587,
+  port: 2525,
   secure: false,
   auth: {
-    user: "apikey", // LITERALLY the word "apikey"
+    user: "apikey",
     pass: process.env.SENDGRID_API_KEY,
   },
+  connectionTimeout: 30000, // 30 seconds
+  greetingTimeout: 30000,
+  socketTimeout: 30000,
 });
 
 // Verify email configuration on startup
