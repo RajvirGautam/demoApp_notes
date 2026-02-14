@@ -26,23 +26,25 @@ app.use(cors({
 
 // Nodemailer Configuration
 
-// Nodemailer Configuration (FORCE IPv4)
+// Nodemailer Configuration with SendGrid
 const transporter = nodemailer.createTransport({
-  host: "smtp.gmail.com",
+  host: "smtp.sendgrid.net",
   port: 587,
   secure: false,
   auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS,
+    user: "apikey", // LITERALLY the word "apikey"
+    pass: process.env.SENDGRID_API_KEY,
   },
-  tls: {
-    rejectUnauthorized: false,
-  },
-  // FORCE IPv4 - THIS IS THE KEY!
-  family: 4,
-  connectionTimeout: 10000,
-  greetingTimeout: 10000,
-  socketTimeout: 10000,
+});
+
+// Verify email configuration on startup
+transporter.verify((error, success) => {
+  if (error) {
+    console.log("⚠️ Email configuration error:", error.message);
+    console.log("Full error:", error);
+  } else {
+    console.log("✅ SendGrid email server ready");
+  }
 });
 
 
