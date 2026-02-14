@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+console.log("🔍 ENV CHECK:", import.meta.env.VITE_API_URL);
+
 
 interface Note {
   _id: string;
@@ -27,23 +29,36 @@ export default function NotePage() {
   }, [token, navigate]);
 
   const fetchNotes = async () => {
-    try {
-      setError("");
-      const res = await axios.get(`${import.meta.env.VITE_API_URL}/notes`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+  try {
+    setError("");
+    const res = await axios.get(`${import.meta.env.VITE_API_URL}/notes`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    
+    // ADD THIS CHECK:
+    console.log("📥 Fetched notes:", res.data);
+    
+    // Ensure it's an array
+    if (Array.isArray(res.data)) {
       setNotes(res.data);
-    } catch (error: any) {
-      console.error("Error fetching notes:", error);
-      if (error.response?.status === 401) {
-        localStorage.removeItem("token");
-        navigate("/");
-      }
-      setError("Failed to load notes");
+    } else {
+      console.error("❌ Response is not an array:", res.data);
+      setNotes([]); // Set empty array as fallback
+      setError("Invalid response format");
     }
-  };
+  } catch (error: any) {
+    console.error("Error fetching notes:", error);
+    if (error.response?.status === 401) {
+      localStorage.removeItem("token");
+      navigate("/");
+    }
+    setNotes([]); // ADD THIS: Set empty array on error
+    setError("Failed to load notes");
+  }
+};
+
 
   const handleAddNote = async () => {
     if (!title.trim()) {

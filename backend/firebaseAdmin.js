@@ -17,4 +17,4 @@ try {
   process.exit(1);
 }
 
-export default admin;
+export default admin
